@@ -194,7 +194,7 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
 
   <div class="card small">
         <p style="margin:0 0 8px">Version <span id="ver"></span>. Lamell är gratis, utan reklam och fungerar helt offline – inget du fotar eller sparar lämnar telefonen.</p>
-    <p style="margin:0 0 8px"><b>Arterna:</b> 232 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
+    <p style="margin:0 0 8px"><b>Arterna:</b> 250 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
     <p style="margin:0 0 8px"><b>Foton:</b> Fotona kommer från Wikimedia Commons och har öppna licenser (CC0, CC BY eller CC BY-SA). Fotograf och licens står under varje bild.</p>
     <p style="margin:0 0 8px"><b>Bildigenkänning:</b> <span id="model-info">Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på 1 604 arter från Danmark. Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt.</span></p>
     <p style="margin:0 0 8px"><b>Licens:</b> Källkoden är fri programvara under GNU General Public License v3. <a href="https://github.com/jonsolberg/lamell">Källkod på GitHub</a></p>
@@ -398,10 +398,10 @@ function openSpecies(id){
       <div class="small muted" style="margin-top:6px">${myFinds.map(f=>esc(fmtDate(f.date))+(f.place?" – "+esc(f.place):"")).slice(0,5).join("<br>")}</div></div>` : ""}
     <div class="btns wide"><button class="btn primary" onclick="newFind(${s.id})">Spara fynd av ${esc(s.sv.toLowerCase())}</button></div>
     <div class="btns wide">
-      <a class="btn" href="https://svampguiden.com/sv/art/${s.id}-${esc(s.slug)}">Svampguiden ↗</a>
+      ${s.sg===0 ? "" : `<a class="btn" href="https://svampguiden.com/sv/art/${s.id}-${esc(s.slug)}">Svampguiden ↗</a>`}
       <a class="btn" href="https://artfakta.se/taxa/${s.id}">Artfakta ↗</a>
     </div>
-    <p class="small muted">Fler foton, utbredningskartor och längre beskrivningar finns på Svampguiden och Artfakta.${PHOTOS[s.id]?"":" Det finns inget öppet licensierat foto av arten än."}</p>`;
+    <p class="small muted">Fler foton, utbredningskartor och längre beskrivningar finns på ${s.sg===0?"":"Svampguiden och "}Artfakta.${PHOTOS[s.id]?"":" Det finns inget öppet licensierat foto av arten än."}</p>`;
   openSheet("s-species");
 }
 

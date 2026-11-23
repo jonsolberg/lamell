@@ -142,8 +142,12 @@ def main():
     print("Wikidata images:", len(wd))
 
     os.makedirs(OUT, exist_ok=True)
-    result, missing = {}, []
+    pj = os.path.join(ROOT, "data", "photos.json")
+    result = json.load(open(pj)) if os.path.exists(pj) else {}
+    missing = []
     for s in species:
+        if str(s["id"]) in result and os.path.exists(os.path.join(OUT, f"{s['id']}.webp")):
+            continue  # already has a photo
         chosen = None
         cands = ["File:" + wd[n] for n in names_for[s["id"]] if n in wd]
         if cands:

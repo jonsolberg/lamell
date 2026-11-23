@@ -1,7 +1,7 @@
 name: Fetch photos
 
-# Runs scripts/fetch_photos.py and pushes the photos to the "photos-update"
-# branch, to be reviewed and merged by hand.
+# Runs scripts/fetch_photos.py for species that have no photo yet and commits
+# the new photos to main.
 on:
   workflow_dispatch:
   push:
@@ -21,11 +21,9 @@ jobs:
           python-version: "3.11"
       - run: pip install pillow==11.0.0
       - run: python scripts/fetch_photos.py
-      - name: Push to photos-update
+      - name: Commit new photos
         run: |
           git config user.name "Jon Solberg"
           git config user.email "jonsolberg@users.noreply.github.com"
-          git checkout -b photos-update
           git add app/src/main/assets/photos app/src/main/assets/data/photos.json
-          git commit -qm "Open photos from Wikimedia Commons"
-          git push -f origin photos-update
+          git diff --cached --quiet || { git commit -qm "Photos for new species"; git push origin HEAD:main; }

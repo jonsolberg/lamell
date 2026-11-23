@@ -1,6 +1,6 @@
 # Lamell (Android)
 
-A field guide to Swedish mushrooms that works fully offline: 232 species with edibility, look-alikes and season, on-device image recognition, and a private log of your finds with GPS positions. The app is in Swedish.
+A field guide to Swedish mushrooms that works fully offline: 250 species with edibility, look-alikes and season, on-device image recognition, and a private log of your finds with GPS positions. The app is in Swedish.
 
 > **Lamell is an aid, not a guarantee.** Image recognition and descriptions can be wrong, and several deadly mushrooms look like edible ones. Never eat a mushroom you have not identified with certainty yourself. Suspected poisoning in Sweden: call 112 and ask for Giftinformation (non-urgent: 010-456 67 00).
 
@@ -11,7 +11,7 @@ A field guide to Swedish mushrooms that works fully offline: 232 species with ed
   <img src="docs/screenshot-dark.png" width="200" alt="Lamell in dark mode, death cap page">
 </p>
 
-- **Species (Arter):** 232 Swedish mushrooms, 225 of them with an openly licensed photo – edible, inedible, poisonous and deadly – with key features, habitat, a season calendar, notes, look-alikes (tap to compare), taste rating and red-list status. Search by Swedish or scientific name; filter with two drop-down lists by edibility, group, "in season now" or red-listed. Every species links to its page on Svampguiden and on Artfakta (SLU Artdatabanken).
+- **Species (Arter):** 250 Swedish mushrooms, 225 of them with an openly licensed photo – edible, inedible, poisonous and deadly – with key features, habitat, a season calendar, notes, look-alikes (tap to compare), taste rating and red-list status. Search by Swedish or scientific name; filter with two drop-down lists by edibility, group, "in season now" or red-listed. Every species links to its page on Svampguiden and on Artfakta (SLU Artdatabanken).
 - **Identify (Identifiera):** take a photo or pick one from the gallery (or share one to Lamell from another app). A neural network running on the phone suggests the most likely species. Add photos of the cap, the underside and the stem base, and Lamell combines them. Deadly and poisonous candidates are flagged, and so are uncertain results.
 - **Finds (Fynd):** save where you found mushrooms, with date, GPS position and accuracy, place name, amount, notes and photos. Open a find in your map app, share it, or export all finds as GPX (map apps) or CSV (spreadsheets). Everything stays on the phone.
 - **Books (Böcker):** Swedish field guides with links to Libris (the Swedish libraries' joint catalogue), official sources (Giftinformationscentralen, Artfakta, Nationalnyckeln, Artportalen, 1177) and emergency numbers.
@@ -32,7 +32,7 @@ The photos are openly licensed photos from Wikimedia Commons (see Credits).
 
 The species facts are in `app/src/main/assets/data/species.json`. The numeric species ids are the Swedish taxon ids (Dyntaxa), so the links to Svampguiden and Artfakta point to the right pages.
 
-The image model is the [Danish Fungi 2020](https://github.com/BohemianVRA/DanishFungiDataset) EfficientNet-B3 classifier ([`BVRA/tf_efficientnet_b3.in1k_ft_df20_384`](https://huggingface.co/BVRA/tf_efficientnet_b3.in1k_ft_df20_384)). It recognises 1,604 species found in Denmark, most of which also grow in Sweden. The model is not kept in this repository. `scripts/build_model.py` downloads it, converts it to ONNX, writes the class labels from the dataset metadata and tests it on photos from Wikimedia Commons, so a wrong label order fails the build. `scripts/check_labels.py` reports which of Lamell's 232 species the model can recognise; older scientific names are matched through `data/synonyms.json`.
+The image model is the [Danish Fungi 2020](https://github.com/BohemianVRA/DanishFungiDataset) EfficientNet-B3 classifier ([`BVRA/tf_efficientnet_b3.in1k_ft_df20_384`](https://huggingface.co/BVRA/tf_efficientnet_b3.in1k_ft_df20_384)). It recognises 1,604 species found in Denmark, most of which also grow in Sweden. The model is not kept in this repository. `scripts/build_model.py` downloads it, converts it to ONNX, writes the class labels from the dataset metadata and tests it on photos from Wikimedia Commons, so a wrong label order fails the build. `scripts/check_labels.py` reports which of Lamell's 250 species the model can recognise; older scientific names are matched through `data/synonyms.json`.
 
 ## Building
 
