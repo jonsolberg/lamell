@@ -1,5 +1,7 @@
 name: Remove old releases
 
+# Runs when this file changes: deletes every release and tag except the
+# version in app/build.gradle.kts.
 on:
   push:
     paths:
@@ -12,11 +14,15 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete the old releases, tags and branches
+      - uses: actions/checkout@v4
+      - name: Delete older releases and tags
         env:
           GH_TOKEN: ${{ github.token }}
           R: ${{ github.repository }}
         run: |
-          for t in v1.0 v1.1; do gh release delete "$t" -R "$R" --cleanup-tag --yes || true; done
-          for t in v1.0 v1.1; do gh api -X DELETE "repos/$R/git/refs/tags/$t" || true; done
-          gh api -X DELETE "repos/$R/git/refs/heads/photos-update" || true
+          KEEP="v$(grep -oP 'versionName\s*=?\s*"\K[^"]+' app/build.gradle.kts | head -1)"
+          echo "Keeping $KEEP"
+          for t in $(gh api "repos/$R/tags" -q '.[].name'); do
+            [ "$t" = "$KEEP" ] && continue
+            gh release delete "$t" -R "$R" --cleanup-tag --yes || gh api -X DELETE "repos/$R/git/refs/tags/$t" || true
+          done

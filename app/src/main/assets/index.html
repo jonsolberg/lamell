@@ -41,6 +41,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .search{display:flex;gap:8px;margin-top:10px}
 input,select,textarea{font:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
 textarea{min-height:80px;resize:vertical}
+.filters{display:flex;gap:8px;margin-top:8px}.filters select{flex:1;min-width:0;padding:9px 10px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:14px;white-space:nowrap}
@@ -123,8 +124,7 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
   <div class="top" style="margin:-12px -16px 0;">
     <div class="row"><h1>Svampar</h1><span class="muted small" id="sp-total"></span></div>
     <div class="search"><input id="q" type="search" placeholder="Sök svenskt eller latinskt namn" autocomplete="off"></div>
-    <div class="chips" id="f-edib"></div>
-    <div class="chips" id="f-group" style="padding-top:4px"></div>
+    <div class="filters"><select id="f-edib" aria-label="Visa"></select><select id="f-group" aria-label="Grupp"></select></div>
   </div>
   <div class="count" id="sp-count"></div>
   <div class="list" id="sp-list"></div>
@@ -165,7 +165,7 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
 
 <!-- ======================= MER ======================= -->
 <section class="view" id="v-more">
-  <div class="top" style="margin:-12px -16px 0;"><div class="row"><h1>Mer</h1></div></div>
+  <div class="top" style="margin:-12px -16px 0;"><div class="row"><h1>Böcker och hjälp</h1></div></div>
 
   <div class="warnbox dead">
     <b>Vid misstänkt svampförgiftning</b>
@@ -185,6 +185,22 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
     <div class="list2" id="links"></div>
   </div>
 
+
+</section>
+
+<!-- ======================= OM ======================= -->
+<section class="view" id="v-about">
+  <div class="top" style="margin:-12px -16px 0;"><div class="row"><h1>Om Lamell</h1></div></div>
+
+  <div class="card small">
+        <p style="margin:0 0 8px">Version <span id="ver"></span>. Lamell är gratis, utan reklam och fungerar helt offline – inget du fotar eller sparar lämnar telefonen.</p>
+    <p style="margin:0 0 8px"><b>Arterna:</b> 232 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
+    <p style="margin:0 0 8px"><b>Foton:</b> Fotona kommer från Wikimedia Commons och har öppna licenser (CC0, CC BY eller CC BY-SA). Fotograf och licens står under varje bild.</p>
+    <p style="margin:0 0 8px"><b>Bildigenkänning:</b> <span id="model-info">Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på 1 604 arter från Danmark. Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt.</span></p>
+    <p style="margin:0 0 8px"><b>Licens:</b> Källkoden är fri programvara under GNU General Public License v3. <a href="https://github.com/jonsolberg/lamell">Källkod på GitHub</a></p>
+    <div class="btns"><a class="btn primary" href="https://ko-fi.com/jonsolberg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Support me</a><a class="btn" href="https://jonsolberg.se:8080/">jonsolberg.se</a></div>
+  </div>
+
   <div class="card">
     <h3>Inställningar</h3>
     <label class="f">Tema</label>
@@ -192,16 +208,6 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
       <button data-t="auto">Automatiskt</button><button data-t="light">Ljust</button><button data-t="dark">Mörkt</button>
     </div>
     <div class="btns"><button class="btn" onclick="showDisclaimer(true)">Visa ansvarsfriskrivningen</button></div>
-  </div>
-
-  <div class="card small">
-    <h3>Om Lamell</h3>
-    <p style="margin:0 0 8px">Version <span id="ver"></span>. Lamell är gratis, utan reklam och fungerar helt offline – inget du fotar eller sparar lämnar telefonen.</p>
-    <p style="margin:0 0 8px"><b>Arterna:</b> 232 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
-    <p style="margin:0 0 8px"><b>Foton:</b> Fotona kommer från Wikimedia Commons och har öppna licenser (CC0, CC BY eller CC BY-SA). Fotograf och licens står under varje bild.</p>
-    <p style="margin:0 0 8px"><b>Bildigenkänning:</b> <span id="model-info">Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på 1 604 arter från Danmark. Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt.</span></p>
-    <p style="margin:0 0 8px"><b>Licens:</b> Källkoden är fri programvara under GNU General Public License v3. <a href="https://github.com/jonsolberg/lamell">Källkod på GitHub</a></p>
-    <div class="btns"><a class="btn primary" href="https://ko-fi.com/jonsolberg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Support me</a><a class="btn" href="https://jonsolberg.se:8080/">jonsolberg.se</a></div>
   </div>
 </section>
 
@@ -244,7 +250,8 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
   <button data-v="species" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 7 0 0 1 18 0z"/><path d="M10 12v6a2 2 0 0 0 4 0v-6"/></svg>Arter</button>
   <button data-v="identify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Identifiera</button>
   <button data-v="finds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Fynd</button>
-  <button data-v="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5zM19 4h-4a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h5z"/></svg>Böcker &amp; mer</button>
+  <button data-v="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5zM19 4h-4a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h5z"/></svg>Böcker</button>
+  <button data-v="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg>Om</button>
 </nav>
 
 <script>
@@ -314,11 +321,11 @@ function inSeason(sp, m){ const [a,b] = sp.m; return a <= b ? (m >= a && m <= b)
 // ---------------------------------------------------------------------------
 // Species list
 function renderFilters(){
-  const ed = [["all","Alla"],["now","I säsong nu"],["M","Matsvampar"],["G","Giftiga"],["D","Dödligt giftiga"],["O","Oätliga"],["red","Rödlistade"]];
-  $("f-edib").innerHTML = ed.map(([k,v])=>`<button class="chip ${state.edib===k?"on":""}" data-k="${k}">${v}</button>`).join("");
+  const ed = [["all","Alla arter"],["now","I säsong nu"],["M","Matsvampar"],["G","Giftiga"],["D","Dödligt giftiga"],["O","Oätliga"],["red","Rödlistade"]];
+  $("f-edib").innerHTML = ed.map(([k,v])=>`<option value="${k}" ${state.edib===k?"selected":""}>${v}</option>`).join("");
   const groups = [...new Set(SPECIES.map(s=>s.g))].sort((a,b)=>a.localeCompare(b,"sv"));
-  $("f-group").innerHTML = `<button class="chip ${state.group==="all"?"on":""}" data-g="all">Alla grupper</button>` +
-    groups.map(g=>`<button class="chip ${state.group===g?"on":""}" data-g="${esc(g)}">${esc(g[0].toUpperCase()+g.slice(1))}</button>`).join("");
+  $("f-group").innerHTML = `<option value="all">Alla grupper</option>` +
+    groups.map(g=>`<option value="${esc(g)}" ${state.group===g?"selected":""}>${esc(g[0].toUpperCase()+g.slice(1))}</option>`).join("");
 }
 function renderSpecies(){
   const q = fold(state.q.trim()), m = new Date().getMonth()+1;
@@ -696,8 +703,8 @@ async function init(){
   $("q").addEventListener("input", e=>{ state.q = e.target.value; renderSpecies(); });
   $("fq").addEventListener("input", renderFinds);
   $("pq").addEventListener("input", renderPick);
-  $("f-edib").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; state.edib=b.dataset.k; renderFilters(); renderSpecies(); });
-  $("f-group").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; state.group=b.dataset.g; renderFilters(); renderSpecies(); });
+  $("f-edib").addEventListener("change", e=>{ state.edib=e.target.value; renderSpecies(); });
+  $("f-group").addEventListener("change", e=>{ state.group=e.target.value; renderSpecies(); });
   $("tabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) showView(b.dataset.v); });
   $("theme-seg").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; localStorage.setItem("theme", b.dataset.t); applyTheme(); });
 

@@ -11,10 +11,11 @@ A field guide to Swedish mushrooms that works fully offline: 232 species with ed
   <img src="docs/screenshot-dark.png" width="200" alt="Lamell in dark mode, death cap page">
 </p>
 
-- **Species (Arter):** 232 Swedish mushrooms, 225 of them with an openly licensed photo – edible, inedible, poisonous and deadly – with key features, habitat, a season calendar, notes, look-alikes (tap to compare), taste rating and red-list status. Search by Swedish or scientific name; filter by edibility, group, "in season now" or red-listed. Every species links to its page on Svampguiden and on Artfakta (SLU Artdatabanken).
+- **Species (Arter):** 232 Swedish mushrooms, 225 of them with an openly licensed photo – edible, inedible, poisonous and deadly – with key features, habitat, a season calendar, notes, look-alikes (tap to compare), taste rating and red-list status. Search by Swedish or scientific name; filter with two drop-down lists by edibility, group, "in season now" or red-listed. Every species links to its page on Svampguiden and on Artfakta (SLU Artdatabanken).
 - **Identify (Identifiera):** take a photo or pick one from the gallery (or share one to Lamell from another app). A neural network running on the phone suggests the most likely species. Add photos of the cap, the underside and the stem base, and Lamell combines them. Deadly and poisonous candidates are flagged, and so are uncertain results.
 - **Finds (Fynd):** save where you found mushrooms, with date, GPS position and accuracy, place name, amount, notes and photos. Open a find in your map app, share it, or export all finds as GPX (map apps) or CSV (spreadsheets). Everything stays on the phone.
-- **Books and more (Böcker & mer):** Swedish field guides with links to Libris (the Swedish libraries' joint catalogue), official sources (Giftinformationscentralen, Artfakta, Nationalnyckeln, Artportalen, 1177), emergency numbers, and settings (automatic, light or dark theme).
+- **Books (Böcker):** Swedish field guides with links to Libris (the Swedish libraries' joint catalogue), official sources (Giftinformationscentralen, Artfakta, Nationalnyckeln, Artportalen, 1177) and emergency numbers.
+- **About (Om):** version, photo and model credits, licence, Support me, and settings (automatic, light or dark theme).
 - No account, no ads, no tracking. The only network use is an optional daily check for new versions on GitHub, which you can turn off at first start. Links open in your browser.
 
 ## Download
