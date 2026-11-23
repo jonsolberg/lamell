@@ -1,0 +1,22 @@
+name: Remove old releases
+
+on:
+  push:
+    paths:
+      - .github/workflows/cleanup.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete the old releases, tags and branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          R: ${{ github.repository }}
+        run: |
+          for t in v1.0 v1.1; do gh release delete "$t" -R "$R" --cleanup-tag --yes || true; done
+          for t in v1.0 v1.1; do gh api -X DELETE "repos/$R/git/refs/tags/$t" || true; done
+          gh api -X DELETE "repos/$R/git/refs/heads/photos-update" || true
