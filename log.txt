@@ -1,0 +1,149 @@
+11-23 17:18:11.804   964   964 I AndroidRuntime: VM exiting with result code 0, cleanup skipped.
+11-23 17:18:19.555  1649  2272 I AiAiTextClassifier: Updating text classifier flags in CutoffProvider.
+11-23 17:18:19.626  1649  2272 I AiAiTextClassifier: [KnowledgeGraphCollectionsTableDownloaderImpl] triggering an initial sync of KnowledgeGraphCollectionsTable
+11-23 17:18:19.707  1649  2272 I AiAiTextClassifier: Triggering initial sync of webref model
+11-23 17:18:19.707  1649  2272 I AiAiTextClassifier: Syncing webref with url: https://gstatic.com/webref-ondevice/aiai/19071200_pir/2/en-us/superpacks_manifest.zip, version 19071200
+11-23 17:18:19.708  1649  2272 I AiAiTextClassifier: Location is not available in Webref slicing strategy
+11-23 17:18:19.765  1649  2272 I AiAiTextClassifier: Notifying pack set listeners of new global pack: ""
+11-23 17:18:19.765  1649  2272 I AiAiTextClassifier: Syncing webref with url: https://gstatic.com/webref-ondevice/aiai/19071200_pir/2/en-us/superpacks_manifest.zip, version 19071200
+11-23 17:18:19.766  1649  2272 I AiAiTextClassifier: Location is not available in Webref slicing strategy
+11-23 17:18:20.095  1649  2368 I AiAiTextClassifier: ===> [TextClassifierLibProviderImpl]: Maybe loading public slice in TcLib
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: [TextClassifierLibProviderImpl]: Failed to load webref in TcLib, keeping the existing instance
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: knw: No downloadable or bundled packs are available.
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at kns.a(PG:19)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at ims.b(PG:1)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at iob.h(PG:3)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at iob.a(PG:6)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at ilp.g(PG:1)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at ilo.run(PG:57)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at dgq.run(PG:67)
+11-23 17:18:20.118  1649  2368 E AiAiTextClassifier: 	at java.lang.Thread.run(Thread.java:1012)
+11-23 17:18:23.909  1649  1649 I AiAiTextClassifier: ActionRankingDataTtlService - Scheduling action ranking job [jobId=284347269, interval=PT24H]
+11-23 17:18:32.428  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully loaded embedded superpacks manifest for 'kg_collections_table' (download version 21051103), starting to download superpack.
+11-23 17:18:36.404  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully loaded embedded superpacks manifest for 'actions-ranking-table' (download version 211005), starting to download superpack.
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: Model sync failed.
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: kit: Request of 1 packs for webref-2-en-us-manifest failed
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at cjq.call(PG:126)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at oeh.a(Unknown Source:2)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at ofj.run(PG:3)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.lang.Thread.run(Thread.java:1012)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: Caused by: koy: HTTP_ERROR 404, url: https://gstatic.com/webref-ondevice/aiai/19071200_pir/2/en-us/superpacks_manifest.zip
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kow.b(Unknown Source:4)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kuk.o(PG:7)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kug.run(PG:9)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at dgq.run(PG:67)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	... 1 more
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: [TextClassifierLibProviderImpl]: TcLib packs sync failed.
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: kit: Request of 1 packs for webref-2-en-us-manifest failed
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at cjq.call(PG:126)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at oeh.a(Unknown Source:2)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at ofj.run(PG:3)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.lang.Thread.run(Thread.java:1012)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: Caused by: koy: HTTP_ERROR 404, url: https://gstatic.com/webref-ondevice/aiai/19071200_pir/2/en-us/superpacks_manifest.zip
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kow.b(Unknown Source:4)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kuk.o(PG:7)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at kug.run(PG:9)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	at dgq.run(PG:67)
+11-23 17:18:36.613  1649  2285 W AiAiTextClassifier: 	... 1 more
+11-23 17:18:37.003  1649  2237 I AiAiTextClassifier: [SentencePieceTokenizerModelManagerImpl]: downloadNewModel: Downloading Sentence Piece Tokenizer model using Superpacks is disabled.
+11-23 17:18:37.003  1649  2237 I AiAiTextClassifier: [SentencePieceTokenizerModelManagerImpl]: initializeTcLibModelDownload: Setting listener for model versions change.
+11-23 17:18:39.099  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully downloaded superpack 'kg_collections_table', download version 21051103.
+11-23 17:18:39.239  1649  2237 I AiAiTextClassifier: [KnowledgeGraphCollectionsTableDownloaderImpl] reading KnowledgeGraphCollectionsTable from path /data/user/0/com.google.android.as/files/superpacks/kg_collections_table/collections_table_main_21980965fbd997111d89f86c16e9e090/collections_table.
+11-23 17:18:40.292  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully downloaded superpack 'actions-ranking-table', download version 211005.
+11-23 17:18:40.325  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully loaded embedded superpacks manifest for 'text-classifier-annotator' (download version 272525175), starting to download superpack.
+11-23 17:18:41.780  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully loaded embedded superpacks manifest for 'text-classifier-actions' (download version 1140547708), starting to download superpack.
+11-23 17:18:52.650  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:18:56.535  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:18:56.536  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.132  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.134  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.168  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.169  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.205  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:00.733  4481  4481 I AndroidRuntime: VM exiting with result code 0, cleanup skipped.
+11-23 17:19:01.693  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully loaded embedded superpacks manifest for 'text-classifier-langid' (download version 1941001461), starting to download superpack.
+11-23 17:19:01.859  1649  3562 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully downloaded superpack 'text-classifier-annotator', download version 272525175.
+11-23 17:19:02.004  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:02.135  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:02.171  1649  4887 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully downloaded superpack 'text-classifier-actions', download version 1140547708.
+11-23 17:19:02.277  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:02.430  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: downloadNewModelRecursively: packSet downloaded successfully: https://gstatic.com/matchmaker/tclib_models/annotator/v803/en/superpacks_manifest.zip
+11-23 17:19:02.445  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: downloadNewModelRecursively: packSet downloaded successfully: https://gstatic.com/matchmaker/tclib_models/actions/v104/en-us/superpacks_manifest.zip
+11-23 17:19:02.457  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: updateModelsInTextClassifierLib: Done executing updateModels() from path: /data/user/0/com.google.android.as/files/superpacks/text-classifier-annotator/tc_model_a3d2c1298643d7cc3b5703308fd5b2d0/en.fb.
+11-23 17:19:02.460  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: updateModelsInTextClassifierLib: Done executing updateModels() from path: /data/user/0/com.google.android.as/files/superpacks/text-classifier-actions/tc_model_e202592534082c01f9642f709a627dd9/en.model.
+11-23 17:19:02.734  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:03.061  1649  4887 I AiAiTextClassifier: [ResourceDownloaderImpl]: downloadResource(): Successfully downloaded superpack 'text-classifier-langid', download version 1941001461.
+11-23 17:19:03.863  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: downloadNewModelRecursively: packSet downloaded successfully: https://gstatic.com/matchmaker/tclib_models/langid/v1/superpacks_manifest.zip
+11-23 17:19:04.227  1649  2237 I AiAiTextClassifier: [TcLibModelManagerImpl]: updateModelsInTextClassifierLib: Done executing updateModels() from path: /data/user/0/com.google.android.as/files/superpacks/text-classifier-langid/tc_model_436dc3fd14049b93d75788a8c0cc8eea/model.smfb.
+11-23 17:19:06.128  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:06.348  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:06.358  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:20.036  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:20.037  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:20.053  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:20.054  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:23.162  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:23.252  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:23.253  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.339  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.340  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.340  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.490  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.491  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.491  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:25.561  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:28.003  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:28.004  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:28.177  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:31.297  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:31.298  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:31.411  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:31.637  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:31.639  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:32.037  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:32.985  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:32.987  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.101  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.118  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.118  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.372  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.617  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.618  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.901  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.912  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.913  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:33.920  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:19:40.378  1808  2818 I FirstRunClassifier: First run of com.google.android.googlequicksearchbox on this device detected
+11-23 17:20:00.216  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.191  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.196  4282  4346 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.285  4282  4347 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.288  4282  4366 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.290  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:14.339  4282  4345 W Bugle   : TextClassifierLibManagerImpl: Reclaiming memory at level: 40
+11-23 17:20:15.190  5548  5548 I AndroidRuntime: VM exiting with result code 0, cleanup skipped.
