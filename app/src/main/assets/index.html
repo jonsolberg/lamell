@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<!--
+  Lamell – svampar i Sverige. Artlista, bildigenkänning och egna fynd, helt offline.
+  Copyright (C) 2026 Jon Solberg. Licensed under the GNU General Public License v3 or later.
+-->
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lamell</title>
+<style>
+:root{
+  --bg:#f4f1ea;--card:#fffdf8;--card2:#ece7dc;--text:#232a24;--muted:#6b7268;--line:#ddd6c8;
+  --accent:#3f6b4a;--accent-ink:#fff;--accent-soft:#dfe9dc;
+  --ok:#2f7a3e;--ok-bg:#dcefd9;--no:#6b6b6b;--no-bg:#e6e3dc;--warn:#9a4d0b;--warn-bg:#fbe5cc;--dead:#a11b1b;--dead-bg:#f8d6d3;
+  --red:#a32d2d;--star:#c08a17;--shadow:0 1px 2px rgba(0,0,0,.06);
+  --r:14px;
+}
+:root.dark{
+  --bg:#141a16;--card:#1d2520;--card2:#26302a;--text:#e9ece6;--muted:#9ea79c;--line:#2f3a33;
+  --accent:#8dbf98;--accent-ink:#10200f;--accent-soft:#25382b;
+  --ok:#8fd19b;--ok-bg:#1f3a25;--no:#b9b9b2;--no-bg:#2d302c;--warn:#f3b46e;--warn-bg:#41301b;--dead:#ff9a91;--dead-bg:#4a1f1d;
+  --red:#ff8e8e;--star:#e6b347;--shadow:none;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+h1,h2,h3{font-family:Georgia,"Noto Serif",serif;font-weight:600;margin:0}
+h1{font-size:26px}h2{font-size:21px}h3{font-size:17px}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+.top .row{display:flex;align-items:center;gap:10px}
+.top h1{flex:1}
+.view{display:none;padding:12px 16px 24px}
+.view.on{display:block}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{flex:1;border:0;background:none;padding:8px 0 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--muted)}
+.tabs button svg{width:24px;height:24px}
+.tabs button.on{color:var(--accent);font-weight:600}
+.search{display:flex;gap:8px;margin-top:10px}
+input,select,textarea{font:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea{min-height:80px;resize:vertical}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:14px;white-space:nowrap}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.count{color:var(--muted);font-size:13px;margin:8px 0 4px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;box-shadow:var(--shadow);text-align:left;width:100%}
+.item .t{flex:1;min-width:0}
+.item .n{font-weight:600}
+.item .l{font-style:italic;color:var(--muted);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.dot svg{width:26px;height:26px}
+.thumb{flex:none;width:52px;height:52px;border-radius:12px;object-fit:cover;background:var(--card2);border:3px solid transparent}
+.thumb.e-M{border-color:var(--ok-bg)}.thumb.e-O{border-color:var(--no-bg)}.thumb.e-G{border-color:var(--warn-bg)}.thumb.e-D{border-color:var(--dead-bg)}
+.hero{margin:0 -16px 10px;position:relative}
+.hero img{width:100%;max-height:360px;object-fit:cover;display:block;background:var(--card2)}
+.credit{font-size:12px;color:var(--muted);padding:4px 16px 0;line-height:1.35}
+.credit a{color:var(--muted)}
+.e-M{background:var(--ok-bg);color:var(--ok)}.e-O{background:var(--no-bg);color:var(--no)}
+.e-G{background:var(--warn-bg);color:var(--warn)}.e-D{background:var(--dead-bg);color:var(--dead)}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}
+.stars{color:var(--star);letter-spacing:1px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;box-shadow:var(--shadow);margin:12px 0}
+.card h3{margin-bottom:6px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 16px;font-weight:600;text-decoration:none;color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{color:var(--red)}
+.btn svg{width:20px;height:20px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btns.wide .btn{flex:1}
+.warnbox{border-radius:var(--r);padding:12px 14px;margin:12px 0;font-size:15px}
+.warnbox.dead{background:var(--dead-bg);color:var(--dead)}
+.warnbox.warn{background:var(--warn-bg);color:var(--warn)}
+.warnbox.info{background:var(--accent-soft);color:var(--text)}
+.warnbox b{display:block;margin-bottom:2px}
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:6px}
+.months span{text-align:center;font-size:11px;padding:4px 0;border-radius:5px;background:var(--card2);color:var(--muted)}
+.months span.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.months span.now{outline:2px solid var(--star)}
+.sheet{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;display:none;padding-bottom:40px}
+.sheet.on{display:block}
+.sheet .top{display:flex;align-items:center;gap:8px}
+.icon{border:0;background:none;padding:6px;border-radius:10px;display:grid;place-items:center;color:var(--text)}
+.icon svg{width:24px;height:24px}
+.photo{width:100%;max-height:340px;object-fit:cover;border-radius:var(--r);display:block;background:var(--card2)}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:8px}
+.thumbs img{width:76px;height:76px;object-fit:cover;border-radius:10px;flex:none}
+.pred{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.pred:first-of-type{border-top:0}
+.pct{flex:none;width:58px;text-align:right;font-weight:700}
+.bar{height:5px;border-radius:3px;background:var(--card2);margin-top:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.find{display:flex;gap:12px;align-items:center}
+.find img,.find .ph{width:64px;height:64px;border-radius:12px;object-fit:cover;flex:none;background:var(--card2)}
+label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:18px}
+.modal.on{display:flex}
+.modal .box{background:var(--card);border-radius:18px;padding:20px;max-width:460px;width:100%;max-height:90vh;overflow:auto}
+.list2 a{display:block;padding:10px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--text)}
+.list2 a:first-child{border-top:0}
+.list2 a small{display:block;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{flex:1;border:0;background:var(--card);padding:9px 6px}
+.seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.spinner{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;color:var(--muted);padding:30px 10px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:60;font-size:15px;display:none;max-width:90%}
+.toast.on{display:block}
+</style>
+</head>
+<body>
+
+<!-- ======================= ARTER ======================= -->
+<section class="view on" id="v-species">
+  <div class="top" style="margin:-12px -16px 0;">
+    <div class="row"><h1>Svampar</h1><span class="muted small" id="sp-total"></span></div>
+    <div class="search"><input id="q" type="search" placeholder="Sök svenskt eller latinskt namn" autocomplete="off"></div>
+    <div class="chips" id="f-edib"></div>
+    <div class="chips" id="f-group" style="padding-top:4px"></div>
+  </div>
+  <div class="count" id="sp-count"></div>
+  <div class="list" id="sp-list"></div>
+</section>
+
+<!-- ======================= IDENTIFIERA ======================= -->
+<section class="view" id="v-identify">
+  <div class="top" style="margin:-12px -16px 0;"><div class="row"><h1>Identifiera</h1></div></div>
+  <div class="warnbox warn"><b>Ett hjälpmedel – ingen garanti</b>Bildigenkänningen gissar utifrån ett foto och har ofta fel, särskilt mellan närstående arter. Ät aldrig en svamp bara för att appen föreslår en matsvamp.</div>
+  <div class="btns wide">
+    <button class="btn primary" onclick="Android.takePhoto()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Ta foto</button>
+    <button class="btn" onclick="Android.pickPhoto()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>Välj bild</button>
+  </div>
+  <div id="id-area"></div>
+  <div class="card" id="id-tips">
+    <h3>Så får du bäst träff</h3>
+    <ul class="small" style="margin:4px 0 0;padding-left:20px">
+      <li>Fota svampen där den växer, i dagsljus och nära, så att den fyller bilden.</li>
+      <li>Lägg till fler bilder av samma svamp: hatten ovanifrån, undersidan (skivor, rör eller taggar) och hela foten. Lamell väger ihop bilderna.</li>
+      <li>Gräv fram fotbasen – en strumpa eller knöl där är viktig för att känna igen flugsvampar.</li>
+      <li>Jämför alltid med artbeskrivningen och förväxlingsarterna, och kontrollera lukt, smak (spotta ut!), sporfärg och växtplats.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================= FYND ======================= -->
+<section class="view" id="v-finds">
+  <div class="top" style="margin:-12px -16px 0;">
+    <div class="row"><h1>Mina fynd</h1>
+      <button class="icon" aria-label="Exportera" onclick="exportFinds()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0-12-4 4m4-4 4 4M5 15v4h14v-4"/></svg></button>
+    </div>
+    <div class="search"><input id="fq" type="search" placeholder="Sök bland fynd" autocomplete="off"></div>
+  </div>
+  <div class="btns wide" style="margin-top:12px"><button class="btn primary" onclick="newFind()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nytt fynd</button></div>
+  <div class="count" id="f-count"></div>
+  <div class="list" id="f-list"></div>
+</section>
+
+<!-- ======================= MER ======================= -->
+<section class="view" id="v-more">
+  <div class="top" style="margin:-12px -16px 0;"><div class="row"><h1>Mer</h1></div></div>
+
+  <div class="warnbox dead">
+    <b>Vid misstänkt svampförgiftning</b>
+    Ring <a href="tel:112" style="color:inherit;font-weight:700">112</a> och begär Giftinformation om det är akut.
+    Icke-akuta frågor: Giftinformationscentralen <a href="tel:+46104566700" style="color:inherit;font-weight:700">010-456 67 00</a> (dygnet runt).
+    Spara gärna en bit av svampen – den kan behövas för att artbestämma.
+  </div>
+
+  <div class="card">
+    <h3>Svampböcker</h3>
+    <p class="small muted" style="margin:0 0 4px">Svenska fälthandböcker att ha med i skogen. Länkarna går till Libris, de svenska bibliotekens gemensamma katalog, där du ser upplagor och vilka bibliotek som har boken.</p>
+    <div class="list2" id="books"></div>
+  </div>
+
+  <div class="card">
+    <h3>Officiella källor och hjälp</h3>
+    <div class="list2" id="links"></div>
+  </div>
+
+  <div class="card">
+    <h3>Inställningar</h3>
+    <label class="f">Tema</label>
+    <div class="seg" id="theme-seg">
+      <button data-t="auto">Automatiskt</button><button data-t="light">Ljust</button><button data-t="dark">Mörkt</button>
+    </div>
+    <div class="btns"><button class="btn" onclick="showDisclaimer(true)">Visa ansvarsfriskrivningen</button></div>
+  </div>
+
+  <div class="card small">
+    <h3>Om Lamell</h3>
+    <p style="margin:0 0 8px">Version <span id="ver"></span>. Lamell är gratis, utan reklam och fungerar helt offline – inget du fotar eller sparar lämnar telefonen.</p>
+    <p style="margin:0 0 8px"><b>Arterna:</b> 232 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
+    <p style="margin:0 0 8px"><b>Foton:</b> Fotona kommer från Wikimedia Commons och har öppna licenser (CC0, CC BY eller CC BY-SA). Fotograf och licens står under varje bild.</p>
+    <p style="margin:0 0 8px"><b>Bildigenkänning:</b> <span id="model-info">Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på 1 604 arter från Danmark. Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt.</span></p>
+    <p style="margin:0 0 8px"><b>Licens:</b> Källkoden är fri programvara under GNU General Public License v3. <a href="https://github.com/jonsolberg/lamell">Källkod på GitHub</a></p>
+    <div class="btns"><a class="btn primary" href="https://ko-fi.com/jonsolberg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Support me</a><a class="btn" href="https://jonsolberg.se:8080/">jonsolberg.se</a></div>
+  </div>
+</section>
+
+<!-- ======================= ART (detalj) ======================= -->
+<div class="sheet" id="s-species">
+  <div class="top"><button class="icon" aria-label="Tillbaka" onclick="back()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><span class="muted small" id="sd-group" style="flex:1"></span></div>
+  <div style="padding:8px 16px" id="sd-body"></div>
+</div>
+
+<!-- ======================= FYND (redigera) ======================= -->
+<div class="sheet" id="s-find">
+  <div class="top"><button class="icon" aria-label="Tillbaka" onclick="back()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><h2 style="flex:1" id="fe-title">Fynd</h2></div>
+  <div style="padding:8px 16px" id="fe-body"></div>
+</div>
+
+<!-- ======================= Välj art ======================= -->
+<div class="sheet" id="s-pick">
+  <div class="top"><button class="icon" aria-label="Tillbaka" onclick="back()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><input id="pq" type="search" placeholder="Sök art" autocomplete="off" style="flex:1"></div>
+  <div style="padding:8px 16px"><div class="list" id="p-list"></div></div>
+</div>
+
+<div class="modal" id="m-disclaimer"><div class="box">
+  <h2 style="margin-bottom:10px">Innan du börjar</h2>
+  <p style="margin:0 0 10px">Lamell är ett <b>hjälpmedel</b> för att lära känna svampar – <b>ingen garanti</b> för att en svamp är ätlig.</p>
+  <ul style="margin:0 0 10px;padding-left:20px">
+    <li>Bildigenkänningen och texterna kan vara fel. Flera dödligt giftiga svampar liknar matsvampar.</li>
+    <li>Ät bara svamp som du själv med säkerhet har artbestämt – gärna med en kunnig person, en svampkonsulent eller en svensk svampbok.</li>
+    <li>Plocka en svamp i taget, och är du osäker – låt bli.</li>
+    <li>Vid misstänkt förgiftning: ring 112 och begär Giftinformation. Icke-akut: 010-456 67 00.</li>
+  </ul>
+  <p class="small muted" style="margin:0 0 14px">Du använder appen på eget ansvar. Utvecklaren ansvarar inte för skador som uppstår av att informationen i appen används.</p>
+  <div class="btns wide"><button class="btn primary" onclick="acceptDisclaimer()">Jag förstår</button></div>
+</div></div>
+
+<div class="modal" id="m-ask"><div class="box"><h2 style="margin-bottom:8px"></h2><p style="margin:0 0 12px"></p><div class="btns wide"></div></div></div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="tabs" id="tabs">
+  <button data-v="species" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 7 0 0 1 18 0z"/><path d="M10 12v6a2 2 0 0 0 4 0v-6"/></svg>Arter</button>
+  <button data-v="identify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Identifiera</button>
+  <button data-v="finds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Fynd</button>
+  <button data-v="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5zM19 4h-4a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h5z"/></svg>Böcker &amp; mer</button>
+</nav>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------------------
+// Browser fallback, so the page can be tried outside the app.
+if (!window.Android) {
+  window.Android = {
+    takePhoto(){ toast("Kameran finns bara i appen"); }, pickPhoto(){ toast("Bildväljaren finns bara i appen"); },
+    canClassify(){ return false; }, classify(){}, locate(){ setTimeout(()=>onLocation({lat:57.7089,lon:11.9746,acc:12,time:Date.now()}),500); },
+    readFinds(){ return localStorage.getItem("finds")||"[]"; }, writeFinds(s){ localStorage.setItem("finds",s); return true; },
+    cleanPhotos(){}, share(t){ console.log(t); }, shareFile(n,m,c){ console.log(n,c); }, shareFind(t){ console.log(t); },
+    openUrl(u){ window.open(u); }, version(){ return "dev"; }, isSystemDark(){ return matchMedia("(prefers-color-scheme: dark)").matches; }, setDark(){}
+  };
+}
+
+const EDIB = {M:"Matsvamp", O:"Oätlig", G:"Giftig", D:"Dödligt giftig"};
+const RED = {LC:"Livskraftig", NT:"Nära hotad", VU:"Sårbar", EN:"Starkt hotad", CR:"Akut hotad", DD:"Kunskapsbrist", NA:"Ej tillämplig", NE:"Ej bedömd", RE:"Nationellt utdöd"};
+const RED_LISTED = new Set(["NT","VU","EN","CR","DD"]);
+const MONTHS = ["J","F","M","A","M","J","J","A","S","O","N","D"];
+const MONTH_NAMES = ["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"];
+
+const BOOKS = [
+  {t:"Nya svampboken", a:"Pelle Holmberg & Hans Marklund", p:"Norstedts, 2014", d:"Standardverket för matsvampar och deras förväxlingssvampar, med ett symbolsystem för förväxlingsrisk.", u:"https://libris.kb.se/vd6fpgq63sb8xfw"},
+  {t:"Lilla svampboken", a:"Pelle Holmberg & Hans Marklund", p:"Norstedts, 2014", d:"Fickversionen av Nya svampboken – 52 matsvampar och förväxlingsarter.", u:"https://libris.kb.se/6qjpndkj1kj4wmc"},
+  {t:"Giftsvampar & svampgifter", a:"Rut Folke, Anders Hirell, Peter Hultén & Anna Myrnäs", p:"2023", d:"Giftsvamparna, deras gifter och symtom. Peter Hultén är svampexpert vid Giftinformationscentralen.", u:"https://libris.kb.se/3lg4c5f51wqbkd55"},
+  {t:"Svampar i Sverige", a:"Mats Karström, Bo Mossberg, Sven Nilsson & Olle Persson", p:"Bonnier fakta, 2013", d:"Bred fälthandbok med över 450 arter.", u:"https://libris.kb.se/j2vzkmmv1m6zf0s"},
+  {t:"Svampar – en fälthandbok", a:"Svengunnar Ryman & Ingmar Holmåsen", p:"Interpublishing, 1992", d:"Klassisk och mycket omfattande fälthandbok (över 1 700 arter).", u:"https://libris.kb.se/7qjfswqk225s6st"},
+  {t:"Svampar i fjällen – en fälthandbok", a:"Ellen Larsson, Gro Gulden, Mikael Jeppson & Jukka Vauras", p:"Sveriges Mykologiska Förening, 2025", d:"För fjällen och fjällbjörkskogen.", u:"https://libris.kb.se/l62248knjxkw67v0"},
+];
+const LINKS = [
+  {t:"Giftinformationscentralen – giftiga svampar", d:"Bilder och fakta om de giftigaste svamparna i Sverige, och vad du gör vid förgiftning.", u:"https://giftinformation.se/svampregister/"},
+  {t:"Svampguiden", d:"Foton, kartor och fler arter.", u:"https://svampguiden.com/"},
+  {t:"Artfakta – SLU Artdatabanken", d:"Officiell artinformation, rödlistning och fynd i Sverige.", u:"https://artfakta.se/"},
+  {t:"Nationalnyckeln till Sveriges flora och fauna", d:"SLU Artdatabankens bokverk om Sveriges arter, på uppdrag av riksdagen.", u:"https://www.slu.se/artdatabanken/publikationer"},
+  {t:"Artportalen", d:"Rapportera dina fynd så att de kommer forskning och naturvård till nytta.", u:"https://www.artportalen.se/"},
+  {t:"Sveriges Mykologiska Förening", d:"Svampkurser, exkursioner och lokala svampföreningar.", u:"https://svampar.se/"},
+  {t:"1177 – svampförgiftning", d:"Råd om vad du ska göra om någon har ätit giftig svamp.", u:"https://www.1177.se/olyckor--skador/akuta-rad---forsta-hjalpen/svampforgiftning/"},
+];
+
+// ---------------------------------------------------------------------------
+let PHOTOS = {}, RECOG = null, SPECIES = [], BY_ID = new Map(), LABELS = null, BY_LATIN = new Map(), SYN = {};
+let finds = [];
+let state = {edib:"all", group:"all", q:""};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const canon = s => { const w = String(s).trim().split(/\s+/); return (w[0] + " " + (w[1]||"").split("/")[0]).toLowerCase(); };
+const fold = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),2600); }
+
+const ICON = {
+  M:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 7 0 0 1 18 0z"/><path d="M10 12v6a2 2 0 0 0 4 0v-6"/></svg>',
+  O:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 7 0 0 1 18 0z"/><path d="M10 12v6a2 2 0 0 0 4 0v-6"/></svg>',
+  G:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg>',
+  D:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11a7 7 0 1 1 14 0c0 2-1 3-2 4v3H7v-3c-1-1-2-2-2-4z"/><circle cx="9.5" cy="11" r="1.5"/><circle cx="14.5" cy="11" r="1.5"/><path d="M10 18v2M14 18v2"/></svg>',
+};
+const pic = s => PHOTOS[s.id] ? `<img class="thumb e-${s.e}" src="photos/${s.id}_s.webp" alt="" loading="lazy">` : `<span class="dot e-${s.e}">${ICON[s.e]}</span>`;
+const credit = (id, prefix) => { const p = PHOTOS[id]; if (!p) return "";
+  const lic = p.licenseUrl ? `<a href="${esc(p.licenseUrl)}">${esc(p.license)}</a>` : esc(p.license);
+  return `${prefix||"Foto"}: ${esc(p.author)} · ${lic} · <a href="${esc(p.source)}">Wikimedia Commons</a>`; };
+const badge = e => `<span class="badge e-${e}">${e==="D"?"☠ ":""}${EDIB[e]}</span>`;
+const stars = n => n ? `<span class="stars" title="Smakbetyg ${n} av 5">${"★".repeat(n)}${"☆".repeat(5-n)}</span>` : "";
+
+function inSeason(sp, m){ const [a,b] = sp.m; return a <= b ? (m >= a && m <= b) : (m >= a || m <= b); }
+
+// ---------------------------------------------------------------------------
+// Species list
+function renderFilters(){
+  const ed = [["all","Alla"],["now","I säsong nu"],["M","Matsvampar"],["G","Giftiga"],["D","Dödligt giftiga"],["O","Oätliga"],["red","Rödlistade"]];
+  $("f-edib").innerHTML = ed.map(([k,v])=>`<button class="chip ${state.edib===k?"on":""}" data-k="${k}">${v}</button>`).join("");
+  const groups = [...new Set(SPECIES.map(s=>s.g))].sort((a,b)=>a.localeCompare(b,"sv"));
+  $("f-group").innerHTML = `<button class="chip ${state.group==="all"?"on":""}" data-g="all">Alla grupper</button>` +
+    groups.map(g=>`<button class="chip ${state.group===g?"on":""}" data-g="${esc(g)}">${esc(g[0].toUpperCase()+g.slice(1))}</button>`).join("");
+}
+function renderSpecies(){
+  const q = fold(state.q.trim()), m = new Date().getMonth()+1;
+  const out = SPECIES.filter(s => {
+    if (q && !fold(s.sv).includes(q) && !fold(s.la).includes(q)) return false;
+    if (state.group !== "all" && s.g !== state.group) return false;
+    if (state.edib === "now") return inSeason(s, m);
+    if (state.edib === "red") return RED_LISTED.has(s.r);
+    if (state.edib !== "all") return s.e === state.edib;
+    return true;
+  });
+  $("sp-count").textContent = out.length === SPECIES.length ? `${out.length} arter` : `${out.length} av ${SPECIES.length} arter`;
+  $("sp-list").innerHTML = out.map(s => `
+    <button class="item" onclick="openSpecies(${s.id})">
+      ${pic(s)}
+      <span class="t"><div class="n">${esc(s.sv)}</div><div class="l">${esc(s.la)}</div></span>
+      <span style="text-align:right">${badge(s.e)}<br>${stars(s.s)}</span>
+    </button>`).join("") || `<div class="empty">Ingen art matchar.</div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Navigation (tabs + sheets, with Android back button support)
+const stack = [];
+function showView(v){
+  document.querySelectorAll(".view").forEach(e=>e.classList.toggle("on", e.id==="v-"+v));
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  while (stack.length) closeTop();
+  window.scrollTo(0,0);
+  localStorage.setItem("view", v);
+}
+function openSheet(id){ const el=$(id); if (stack[stack.length-1]!==id){ stack.push(id); } el.classList.add("on"); el.scrollTop=0; }
+function closeTop(){ const id=stack.pop(); if (id) $(id).classList.remove("on"); if (id==="s-pick" && pickCb) pickCb=null; }
+function back(){ closeTop(); }
+window.onBack = function(){
+  if ($("m-disclaimer").classList.contains("on")) return true;
+  if ($("m-ask").classList.contains("on")){ $("m-ask").classList.remove("on"); return true; }
+  if (stack.length){ closeTop(); return true; }
+  const v = document.querySelector(".view.on").id;
+  if (v !== "v-species"){ showView("species"); return true; }
+  return false;
+};
+
+// ---------------------------------------------------------------------------
+// Species page
+function openSpecies(id){
+  const s = BY_ID.get(id); if (!s) return;
+  const m = new Date().getMonth()+1;
+  $("sd-group").textContent = s.g[0].toUpperCase()+s.g.slice(1);
+  const months = MONTHS.map((x,i)=>`<span class="${inSeason(s,i+1)?"on":""} ${i+1===m?"now":""}" title="${MONTH_NAMES[i]}">${x}</span>`).join("");
+  const looks = s.l.map(i=>BY_ID.get(i)).filter(Boolean);
+  const myFinds = finds.filter(f=>f.sp===s.id);
+  let warn = "";
+  if (s.e==="D") warn = `<div class="warnbox dead"><b>☠ Dödligt giftig</b>Redan en liten mängd kan ge livshotande förgiftning. Rör inte den här svampen i samma korg som matsvamp.</div>`;
+  else if (s.e==="G") warn = `<div class="warnbox warn"><b>Giftig</b>Ät inte. Plocka den inte tillsammans med matsvamp.</div>`;
+  else if (s.e==="M") warn = `<div class="warnbox info"><b>Matsvamp – men kontrollera noga</b>Jämför med förväxlingsarterna nedan och ät bara om du själv är helt säker på arten.</div>`;
+  if (RED_LISTED.has(s.r)) warn += `<div class="warnbox info"><b>Rödlistad: ${RED[s.r]} (${s.r})</b>Arten är hotad eller missgynnad i Sverige. Låt den stå och rapportera gärna fyndet till Artportalen.</div>`;
+  $("sd-body").innerHTML = `
+    ${PHOTOS[s.id] ? `<div class="hero"><img src="photos/${s.id}.webp" alt="${esc(s.sv)}"><div class="credit">${credit(s.id)}</div></div>` : ""}
+    <h1>${esc(s.sv)}</h1>
+    <div class="l muted" style="font-style:italic;margin-bottom:8px">${esc(s.la)}</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${badge(s.e)} ${stars(s.s)} <span class="badge" style="background:var(--card2);color:var(--muted)">Rödlista: ${RED[s.r]||s.r}</span></div>
+    ${warn}
+    ${RECOG && !RECOG.has(s.id) ? `<div class="warnbox info"><b>Okänd för bildigenkänningen</b>Bildmodellen är tränad på danska fynd och känner inte till den här arten, så den föreslås aldrig när du fotar. Bestäm den med beskrivningen och förväxlingsarterna.</div>` : ""}
+    <div class="card"><h3>Kännetecken</h3><div>${esc(s.k)}</div></div>
+    <div class="card"><h3>Växtplats och säsong</h3><div>${esc(s.h)}</div><div class="months">${months}</div></div>
+    <div class="card"><h3>Att tänka på</h3><div>${esc(s.n)}</div></div>
+    ${looks.length ? `<div class="card"><h3>Förväxlingsrisk</h3><div class="list" style="margin-top:6px">${looks.map(x=>`
+      <button class="item" onclick="openSpecies(${x.id})">${pic(x)}<span class="t"><div class="n">${esc(x.sv)}</div><div class="l">${esc(x.la)}</div></span>${badge(x.e)}</button>`).join("")}</div></div>` : ""}
+    ${myFinds.length ? `<div class="card"><h3>Dina fynd (${myFinds.length})</h3><div class="thumbs">${myFinds.filter(f=>f.photos&&f.photos.length).map(f=>`<img src="/photos/${f.photos[0]}_t.jpg" onclick="editFind('${f.id}')" alt="">`).join("")}</div>
+      <div class="small muted" style="margin-top:6px">${myFinds.map(f=>esc(fmtDate(f.date))+(f.place?" – "+esc(f.place):"")).slice(0,5).join("<br>")}</div></div>` : ""}
+    <div class="btns wide"><button class="btn primary" onclick="newFind(${s.id})">Spara fynd av ${esc(s.sv.toLowerCase())}</button></div>
+    <div class="btns wide">
+      <a class="btn" href="https://svampguiden.com/sv/art/${s.id}-${esc(s.slug)}">Svampguiden ↗</a>
+      <a class="btn" href="https://artfakta.se/taxa/${s.id}">Artfakta ↗</a>
+    </div>
+    <p class="small muted">Fler foton, utbredningskartor och längre beskrivningar finns på Svampguiden och Artfakta.${PHOTOS[s.id]?"":" Det finns inget öppet licensierat foto av arten än."}</p>`;
+  openSheet("s-species");
+}
+
+// ---------------------------------------------------------------------------
+// Identification
+let session = null;  // {photos:[id], preds:{id:[{i,p}]}, pending:Set}
+
+window.onPhotoLoading = () => { if (!photoTarget) renderIdentify(true); };
+window.onPhotoCancelled = () => { photoTarget = null; renderIdentify(); };
+window.onPhotoError = msg => { photoTarget = null; toast(msg); renderIdentify(); };
+window.onPhoto = o => {
+  if (photoTarget){ const cb = photoTarget; photoTarget = null; cb(o.id); return; }
+  if (o.shared) showView("identify");
+  if (!session) session = {photos:[], preds:{}, pending:new Set()};
+  session.photos.push(o.id);
+  if (Android.canClassify()){ session.pending.add(o.id); Android.classify(o.id); }
+  renderIdentify();
+};
+window.onPredictions = o => {
+  if (!session) return;
+  session.pending.delete(o.id);
+  if (o.error){ session.error = o.error; }
+  else { session.preds[o.id] = o.top; session.ms = o.ms; }
+  renderIdentify();
+};
+
+function speciesForLabel(i){
+  const name = LABELS ? LABELS[i] : null;
+  if (!name) return {name:"?", sp:null};
+  let key = canon(name);
+  if (SYN[key]) key = SYN[key];
+  return {name, sp: BY_LATIN.get(key) || null};
+}
+
+/** Averages the probabilities over all photos, per species in Lamell's list (or label). */
+function combined(){
+  const n = Object.keys(session.preds).length; if (!n) return [];
+  const acc = new Map();
+  for (const top of Object.values(session.preds)) for (const {i,p} of top){
+    const r = speciesForLabel(i);
+    const key = r.sp ? "s"+r.sp.id : "l"+i;
+    const cur = acc.get(key) || {p:0, sp:r.sp, name:r.name};
+    cur.p += p / n; acc.set(key, cur);
+  }
+  return [...acc.values()].sort((a,b)=>b.p-a.p).slice(0,6);
+}
+
+function renderIdentify(loading){
+  const area = $("id-area");
+  $("id-tips").style.display = session ? "none" : "";
+  if (!session){ area.innerHTML = loading ? `<div class="card"><span class="spinner"></span> Läser bilden…</div>` : ""; return; }
+  const imgs = session.photos.map(id=>`<img src="/photos/${id}_t.jpg" alt="">`).join("");
+  let res = "";
+  if (!Android.canClassify()){
+    res = `<div class="warnbox info"><b>Bildigenkänning saknas</b>Den här versionen byggdes utan bildmodellen. Spara fotot som fynd och bestäm arten med artlistan.</div>`;
+  } else if (session.pending.size){
+    res = `<div class="card"><span class="spinner"></span> Analyserar ${session.photos.length>1?"bilderna":"bilden"}… (första gången tar det några sekunder)</div>`;
+  } else if (session.error && !Object.keys(session.preds).length){
+    res = `<div class="warnbox warn"><b>Det gick inte att analysera bilden</b>${esc(session.error)}</div>`;
+  } else {
+    const c = combined();
+    const top = c[0];
+    const danger = c.filter(x=>x.sp && (x.sp.e==="D"||x.sp.e==="G") && x.p>=0.03);
+    let notes = "";
+    if (danger.some(x=>x.sp.e==="D")) notes += `<div class="warnbox dead"><b>☠ Förslagen innehåller dödligt giftiga arter</b>${danger.filter(x=>x.sp.e==="D").map(x=>esc(x.sp.sv)).join(", ")}. Ät inte svampen.</div>`;
+    else if (danger.length) notes += `<div class="warnbox warn"><b>Förslagen innehåller giftiga arter</b>${danger.map(x=>esc(x.sp.sv)).join(", ")}.</div>`;
+    if (top && top.p < 0.5) notes += `<div class="warnbox info"><b>Osäker bedömning</b>Ingen art sticker ut. Prova fler bilder av hatten, undersidan och foten, eller bestäm arten med artlistan.</div>`;
+    res = notes + `<div class="card"><h3>Förslag</h3>${c.map(x=>{
+      const pct = Math.round(x.p*100);
+      const name = x.sp ? esc(x.sp.sv) : `<i>${esc(x.name)}</i>`;
+      const sub = x.sp ? `<i>${esc(x.sp.la)}</i>` : "Finns inte i Lamells artlista";
+      const click = x.sp ? `onclick="openSpecies(${x.sp.id})"` : "";
+      return `<button class="pred" ${click}>${x.sp?pic(x.sp):`<span class="dot" style="background:var(--card2)"></span>`}
+        <span style="flex:1;min-width:0"><div class="n" style="font-weight:600">${name}</div><div class="small muted">${sub}</div><div class="bar"><i style="width:${Math.max(2,pct)}%"></i></div></span>
+        <span class="pct">${pct < 1 ? "<1" : pct} %</span></button>`;
+    }).join("")}<p class="small muted" style="margin:8px 0 0">Procenten visar hur säker modellen är – inte hur säker artbestämningen är. Modellen känner bara till arter som finns i Danmark och kan aldrig svara ”ingen svamp”.</p></div>`;
+  }
+  area.innerHTML = `
+    <div class="card" style="padding:10px"><div class="thumbs" style="margin:0">${imgs}</div>
+      <div class="btns"><button class="btn" onclick="Android.takePhoto()">+ Foto</button><button class="btn" onclick="Android.pickPhoto()">+ Bild</button><button class="btn" onclick="clearSession()">Börja om</button></div></div>
+    ${res}
+    <div class="btns wide"><button class="btn primary" onclick="findFromSession()">Spara som fynd</button></div>`;
+}
+function clearSession(){ session = null; renderIdentify(); cleanPhotos(); }
+function findFromSession(){
+  const c = session && Object.keys(session.preds).length ? combined() : [];
+  const sp = c[0] && c[0].sp && c[0].p >= 0.5 ? c[0].sp.id : null;
+  newFind(sp, session.photos.slice());
+  session = null; renderIdentify();
+}
+
+// ---------------------------------------------------------------------------
+// Finds
+let editing = null, photoTarget = null, pickCb = null;
+
+function loadFinds(){ try { finds = JSON.parse(Android.readFinds()) || []; } catch(e){ finds = []; } }
+function saveFinds(){
+  finds.sort((a,b)=>(b.date||"").localeCompare(a.date||"") || (b.created||0)-(a.created||0));
+  if (!Android.writeFinds(JSON.stringify(finds))) toast("Kunde inte spara");
+  renderFinds();
+}
+function cleanPhotos(){ Android.cleanPhotos(JSON.stringify(finds.flatMap(f=>f.photos||[]).concat(session?session.photos:[]))); }
+function today(){ const d=new Date(); return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10); }
+function fmtDate(s){ if(!s) return ""; const [y,m,d]=s.split("-").map(Number); return `${d} ${MONTH_NAMES[m-1]} ${y}`; }
+function fmtPos(f){ return f.lat!=null ? `${f.lat.toFixed(5)}, ${f.lon.toFixed(5)}${f.acc?` (±${f.acc} m)`:""}` : ""; }
+function findName(f){ const s = BY_ID.get(f.sp); return s ? s.sv : (f.name || "Okänd art"); }
+
+function renderFinds(){
+  const q = fold(($("fq").value||"").trim());
+  const list = finds.filter(f => !q || fold(findName(f)+" "+(f.place||"")+" "+(f.note||"")).includes(q));
+  $("f-count").textContent = finds.length ? `${list.length} fynd` : "";
+  $("f-list").innerHTML = list.map(f=>{
+    const s = BY_ID.get(f.sp);
+    return `<button class="item find" onclick="editFind('${f.id}')">
+      ${f.photos&&f.photos.length?`<img src="/photos/${f.photos[0]}_t.jpg" alt="">`:`<span class="ph dot ${s?"e-"+s.e:""}" style="width:64px;height:64px">${s?ICON[s.e]:""}</span>`}
+      <span class="t"><div class="n">${esc(findName(f))}</div>
+        <div class="small muted">${esc(fmtDate(f.date))}${f.place?" · "+esc(f.place):""}</div>
+        <div class="small muted">${f.lat!=null?"📍 "+esc(fmtPos(f)):"Ingen position"}${f.count?` · ${esc(f.count)}`:""}</div></span>
+    </button>`;
+  }).join("") || (finds.length ? `<div class="empty">Inga fynd matchar.</div>` :
+    `<div class="empty"><h3>Spara dina svampställen</h3><p>Fyndet sparas med datum, GPS-position, foton och anteckningar – bara i telefonen.</p></div>`);
+}
+
+function newFind(spId, photos){
+  editing = {id:"f"+Date.now(), created:Date.now(), date:today(), sp:spId||null, name:"", place:"", note:"", count:"", photos:photos||[], lat:null, lon:null, acc:null, isNew:true};
+  renderFindEditor();
+  openSheet("s-find");
+  if (localStorage.getItem("autoGps") !== "0") getPosition();
+}
+function editFind(id){
+  const f = finds.find(x=>x.id===id); if (!f) return;
+  editing = JSON.parse(JSON.stringify(f));
+  renderFindEditor(); openSheet("s-find");
+}
+function renderFindEditor(){
+  const f = editing, s = BY_ID.get(f.sp);
+  $("fe-title").textContent = f.isNew ? "Nytt fynd" : "Fynd";
+  $("fe-body").innerHTML = `
+    ${f.photos.length?`<img class="photo" src="/photos/${f.photos[0]}.jpg" alt="">`:""}
+    <div class="thumbs">${f.photos.map((p,i)=>`<img src="/photos/${p}_t.jpg" onclick="photoMenu(${i})" alt="">`).join("")}</div>
+    <div class="btns"><button class="btn" onclick="addFindPhoto(true)">+ Foto</button><button class="btn" onclick="addFindPhoto(false)">+ Bild</button></div>
+
+    <label class="f">Art</label>
+    <button class="item" onclick="pickSpecies()">${s?`<span class="dot e-${s.e}">${ICON[s.e]}</span><span class="t"><div class="n">${esc(s.sv)}</div><div class="l">${esc(s.la)}</div></span>${badge(s.e)}`
+      :`<span class="t"><div class="n">${esc(f.name||"Välj art")}</div><div class="l">Tryck för att välja ur artlistan</div></span>`}</button>
+    ${s?"":`<input id="fe-name" placeholder="…eller skriv ett eget namn" value="${esc(f.name)}" style="margin-top:8px">`}
+
+    <label class="f">Datum</label><input id="fe-date" type="date" value="${esc(f.date)}">
+
+    <label class="f">Position</label>
+    <div class="card" style="margin:0">
+      <div id="fe-pos">${f.lat!=null?`<b>${esc(fmtPos(f))}</b>`:'<span class="muted">Ingen position sparad</span>'}</div>
+      <div class="btns"><button class="btn" onclick="getPosition()">📍 Hämta position</button>${f.lat!=null?`<button class="btn" onclick="openMap()">Visa på karta</button><button class="btn danger" onclick="clearPos()">Ta bort</button>`:""}</div>
+    </div>
+
+    <label class="f">Platsnamn</label><input id="fe-place" placeholder="Till exempel Delsjöområdet, vid bäcken" value="${esc(f.place)}">
+    <label class="f">Mängd</label><input id="fe-count" placeholder="Till exempel 2 liter, en ring, 5 exemplar" value="${esc(f.count)}">
+    <label class="f">Anteckningar</label><textarea id="fe-note" placeholder="Träd i närheten, lukt, smak, sporfärg …">${esc(f.note)}</textarea>
+
+    <div class="btns wide" style="margin-top:16px"><button class="btn primary" onclick="saveFind()">Spara</button></div>
+    ${f.isNew?"":`<div class="btns wide"><button class="btn" onclick="shareFind()">Dela</button><button class="btn danger" onclick="deleteFind()">Ta bort</button></div>`}`;
+}
+function readEditor(){
+  const v = id => { const e=$(id); return e ? e.value : undefined; };
+  if (v("fe-name")!==undefined) editing.name = v("fe-name").trim();
+  editing.date = v("fe-date") || today();
+  editing.place = v("fe-place").trim(); editing.count = v("fe-count").trim(); editing.note = v("fe-note").trim();
+}
+function saveFind(){
+  readEditor();
+  const f = editing; delete f.isNew;
+  const i = finds.findIndex(x=>x.id===f.id);
+  if (i>=0) finds[i]=f; else finds.push(f);
+  saveFinds(); closeTop(); toast("Fyndet är sparat");
+  cleanPhotos();
+}
+function deleteFind(){
+  ask("Ta bort fyndet?", "Fyndet och dess foton tas bort från telefonen.", [
+    ["Ta bort", ()=>{ finds = finds.filter(x=>x.id!==editing.id); saveFinds(); closeTop(); cleanPhotos(); }, "danger"],
+  ]);
+}
+function addFindPhoto(camera){ readEditor(); photoTarget = id => { editing.photos.push(id); renderFindEditor(); }; camera ? Android.takePhoto() : Android.pickPhoto(); }
+function photoMenu(i){
+  readEditor();
+  ask("Foto", "Vad vill du göra med fotot?", [
+    ["Visa först", ()=>{ const [p]=editing.photos.splice(i,1); editing.photos.unshift(p); renderFindEditor(); }],
+    ["Ta bort", ()=>{ editing.photos.splice(i,1); renderFindEditor(); }, "danger"],
+  ]);
+}
+function pickSpecies(){
+  readEditor();
+  pickCb = id => { editing.sp = id; editing.name = ""; renderFindEditor(); };
+  $("pq").value = ""; renderPick(); openSheet("s-pick");
+}
+function renderPick(){
+  const q = fold($("pq").value.trim());
+  const list = SPECIES.filter(s=>!q || fold(s.sv).includes(q) || fold(s.la).includes(q));
+  $("p-list").innerHTML = `<button class="item" onclick="choose(null)"><span class="t"><div class="n">Okänd / egen art</div></span></button>` +
+    list.map(s=>`<button class="item" onclick="choose(${s.id})">${pic(s)}<span class="t"><div class="n">${esc(s.sv)}</div><div class="l">${esc(s.la)}</div></span></button>`).join("");
+}
+function choose(id){ const cb = pickCb; pickCb = null; closeTop(); if (cb) cb(id); }
+
+let wantPos = false;
+function getPosition(){
+  wantPos = true;
+  const el = $("fe-pos"); if (el) el.innerHTML = `<span class="spinner"></span> Hämtar position…`;
+  Android.locate();
+}
+window.onLocation = o => {
+  if (!wantPos || !editing) return; wantPos = false;
+  if (o.error){ const el=$("fe-pos"); if (el) el.innerHTML = `<span class="muted">${esc(o.error)}</span>`; return; }
+  readEditor();
+  editing.lat = o.lat; editing.lon = o.lon; editing.acc = o.acc; if (o.alt!=null) editing.alt = o.alt;
+  renderFindEditor();
+};
+function clearPos(){ readEditor(); editing.lat = editing.lon = editing.acc = null; delete editing.alt; renderFindEditor(); }
+function openMap(){
+  const f = editing; if (f.lat==null) return;
+  Android.openUrl(`geo:${f.lat},${f.lon}?q=${f.lat},${f.lon}(${encodeURIComponent(findName(f))})`);
+}
+function findText(f){
+  const s = BY_ID.get(f.sp);
+  return [findName(f) + (s?` (${s.la})`:""), fmtDate(f.date), f.place, f.count, f.note,
+    f.lat!=null ? `Position: ${fmtPos(f)}\nhttps://www.openstreetmap.org/?mlat=${f.lat}&mlon=${f.lon}#map=16/${f.lat}/${f.lon}` : ""].filter(Boolean).join("\n");
+}
+function shareFind(){ readEditor(); Android.shareFind(findText(editing), editing.photos[0]||""); }
+
+function exportFinds(){
+  if (!finds.length){ toast("Inga fynd att exportera än"); return; }
+  const x = s => String(s??"").replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));
+  const wpts = finds.filter(f=>f.lat!=null).map(f=>`  <wpt lat="${f.lat}" lon="${f.lon}">${f.alt!=null?`<ele>${f.alt}</ele>`:""}<time>${f.date}T12:00:00Z</time><name>${x(findName(f))}</name><desc>${x([f.place,f.count,f.note].filter(Boolean).join(" – "))}</desc></wpt>`).join("\n");
+  const gpx = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Lamell" xmlns="http://www.topografix.com/GPX/1/1">\n${wpts}\n</gpx>\n`;
+  const c = s => `"${String(s??"").replace(/"/g,'""')}"`;
+  const csv = "﻿Datum;Art;Latinskt namn;Ätlighet;Platsnamn;Latitud;Longitud;Noggrannhet (m);Mängd;Anteckningar\n" +
+    finds.map(f=>{ const s=BY_ID.get(f.sp); return [f.date, findName(f), s?s.la:"", s?EDIB[s.e]:"", f.place, f.lat??"", f.lon??"", f.acc??"", f.count, f.note].map(c).join(";"); }).join("\n");
+  ask("Exportera fynd", "GPX öppnas i kartappar (till exempel OsmAnd eller Google Earth), CSV i kalkylark.", [
+    ["GPX", ()=>Android.shareFile("svampfynd.gpx", "application/gpx+xml", gpx), "primary"],
+    ["CSV", ()=>Android.shareFile("svampfynd.csv", "text/csv", csv)],
+  ]);
+}
+
+/** A small dialog with buttons [label, action, style]; "Avbryt" is always added. */
+function ask(title, text, buttons){
+  const m = $("m-ask");
+  m.querySelector("h2").textContent = title;
+  m.querySelector("p").textContent = text;
+  const box = m.querySelector(".btns");
+  box.innerHTML = "";
+  for (const [label, fn, cls] of buttons.concat([["Avbryt", null]])){
+    const b = document.createElement("button");
+    b.className = "btn " + (cls||""); b.textContent = label;
+    b.onclick = () => { m.classList.remove("on"); if (fn) fn(); };
+    box.appendChild(b);
+  }
+  m.classList.add("on");
+}
+
+// ---------------------------------------------------------------------------
+// Theme
+function applyTheme(){
+  const t = localStorage.getItem("theme") || "auto";
+  const dark = t === "dark" || (t === "auto" && Android.isSystemDark());
+  document.documentElement.classList.toggle("dark", dark);
+  Android.setDark(dark);
+  document.querySelectorAll("#theme-seg button").forEach(b=>b.classList.toggle("on", b.dataset.t===t));
+}
+window.onSystemTheme = () => applyTheme();
+
+// ---------------------------------------------------------------------------
+// Disclaimer
+function showDisclaimer(){ $("m-disclaimer").classList.add("on"); }
+function acceptDisclaimer(){ localStorage.setItem("disclaimer", "1"); $("m-disclaimer").classList.remove("on"); }
+
+// ---------------------------------------------------------------------------
+async function init(){
+  applyTheme();
+  $("ver").textContent = Android.version();
+  $("books").innerHTML = BOOKS.map(b=>`<a href="${b.u}"><b>${esc(b.t)}</b> ↗<small>${esc(b.a)} · ${esc(b.p)}</small><small>${esc(b.d)}</small></a>`).join("");
+  $("links").innerHTML = LINKS.map(b=>`<a href="${b.u}"><b>${esc(b.t)}</b> ↗<small>${esc(b.d)}</small></a>`).join("");
+  if (!localStorage.getItem("disclaimer")) showDisclaimer();
+
+  SPECIES = await (await fetch("data/species.json")).json();
+  SPECIES.sort((a,b)=>a.sv.localeCompare(b.sv,"sv"));
+  BY_ID = new Map(SPECIES.map(s=>[s.id,s]));
+  BY_LATIN = new Map(SPECIES.map(s=>[canon(s.la), s]));
+  try { PHOTOS = await (await fetch("data/photos.json")).json(); } catch(e){ PHOTOS = {}; }
+  try { const syn = await (await fetch("data/synonyms.json")).json(); for (const [k,v] of Object.entries(syn)) SYN[canon(k)] = canon(v); } catch(e){}
+  if (Android.canClassify()){
+    try { LABELS = await (await fetch("model/labels.json")).json(); } catch(e){ LABELS = null; }
+    if (LABELS){ RECOG = new Set(); LABELS.forEach((l,i)=>{ const r = speciesForLabel(i); if (r.sp) RECOG.add(r.sp.id); }); }
+    try { const meta = await (await fetch("model/meta.json")).json();
+      $("model-info").textContent = `Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på ${meta.classes.toLocaleString("sv")} arter från Danmark` +
+        (meta.check?`, kontrollerad mot ${meta.check.photos} foton (rätt art bland de fem första förslagen i ${meta.check.top5} fall)`:"") + ". Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt."; } catch(e){}
+  }
+  $("sp-total").textContent = "";
+  renderFilters(); renderSpecies();
+  loadFinds(); renderFinds(); cleanPhotos();
+
+  $("q").addEventListener("input", e=>{ state.q = e.target.value; renderSpecies(); });
+  $("fq").addEventListener("input", renderFinds);
+  $("pq").addEventListener("input", renderPick);
+  $("f-edib").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; state.edib=b.dataset.k; renderFilters(); renderSpecies(); });
+  $("f-group").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; state.group=b.dataset.g; renderFilters(); renderSpecies(); });
+  $("tabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) showView(b.dataset.v); });
+  $("theme-seg").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; localStorage.setItem("theme", b.dataset.t); applyTheme(); });
+
+  // test hook: index.html#species=3213 opens a species page
+  const h = location.hash.match(/species=(\d+)/); if (h) openSpecies(+h[1]);
+  const v = location.hash.match(/view=(\w+)/); if (v) showView(v[1]);
+}
+init();
+</script>
+</body>
+</html>

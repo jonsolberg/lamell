@@ -1,0 +1,67 @@
+name: Screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache model
+        id: model
+        uses: actions/cache@v4
+        with:
+          path: app/src/main/assets/model
+          key: model-${{ hashFiles('scripts/build_model.py', 'scripts/requirements.txt') }}
+      - uses: actions/setup-python@v5
+        if: steps.model.outputs.cache-hit != 'true'
+        with:
+          python-version: "3.11"
+      - name: Build model
+        if: steps.model.outputs.cache-hit != 'true'
+        run: |
+          pip install -r scripts/requirements.txt
+          python scripts/build_model.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Build
+        run: chmod +x gradlew && ./gradlew --no-daemon assembleDebug
+      - name: Test photos
+        run: |
+          mkdir -p testphotos
+          for sp in Cantharellus_cibarius Amanita_muscaria; do
+            url=$(curl -s -A "Lamell-CI/1.0" "https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=categorymembers&gcmtitle=Category:$sp&gcmtype=file&gcmlimit=10&prop=imageinfo&iiprop=url|mime&iiurlwidth=1024" \
+              | python3 -c "import json,sys; p=json.load(sys.stdin)['query']['pages']; print([i['imageinfo'][0]['thumburl'] for i in sorted(p.values(),key=lambda x:x['title']) if i['imageinfo'][0]['mime']=='image/jpeg'][0])")
+            curl -s -A "Lamell-CI/1.0" -o "testphotos/$sp.jpg" "$url"
+          done
+          ls -la testphotos
+      - name: Run on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          script: bash .github/scripts/screenshots.sh
+      - name: Push screenshots to the ci-screenshots branch
+        if: always()
+        run: |
+          cd shots
+          git init -q -b ci-screenshots
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Screenshots for ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" ci-screenshots

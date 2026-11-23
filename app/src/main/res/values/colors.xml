@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- window background before the page draws; follows the phone's dark mode -->
+    <color name="bg">#FFF4F1EA</color>
+    <color name="bg_light">#FFF4F1EA</color>
+    <color name="bg_dark">#FF141A16</color>
+    <color name="accent">#FF3F6B4A</color>
+    <color name="icon_bg">#FF2F4A37</color>
+</resources>

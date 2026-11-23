@@ -1,0 +1,31 @@
+name: Fetch photos
+
+# Runs scripts/fetch_photos.py and pushes the photos to the "photos-update"
+# branch, to be reviewed and merged by hand.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/fetch_photos.py
+
+permissions:
+  contents: write
+
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pillow==11.0.0
+      - run: python scripts/fetch_photos.py
+      - name: Push to photos-update
+        run: |
+          git config user.name "Jon Solberg"
+          git config user.email "jonsolberg@users.noreply.github.com"
+          git checkout -b photos-update
+          git add app/src/main/assets/photos app/src/main/assets/data/photos.json
+          git commit -qm "Open photos from Wikimedia Commons"
+          git push -f origin photos-update

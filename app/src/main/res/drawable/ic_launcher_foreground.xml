@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A mushroom seen from the side: cap, gills (lameller) and stem. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- cap -->
+    <path android:fillColor="#FFF2E6CF"
+        android:pathData="M28,56 C28,38 40,28 54,28 C68,28 80,38 80,56 Z" />
+    <path android:fillColor="#FFE3D2B0"
+        android:pathData="M28,56 L80,56 C76,60 68,61 54,61 C40,61 32,60 28,56 Z" />
+    <!-- gills -->
+    <path android:strokeColor="#FFC9B48F" android:strokeWidth="1.6" android:fillColor="#00000000"
+        android:pathData="M34,56 L46,61 M42,56 L50,61 M50,56 L53,61 M58,56 L55,61 M66,56 L58,61 M74,56 L62,61" />
+    <!-- stem -->
+    <path android:fillColor="#FFF2E6CF"
+        android:pathData="M48,61 L60,61 C60,70 62,76 64,80 L44,80 C46,76 48,70 48,61 Z" />
+</vector>
