@@ -13,8 +13,8 @@ android {
         applicationId = "se.jonsolberg.lamell"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
         ndk {
             // ONNX Runtime ships about 17 MB of native code per CPU type. Phones from the last
             // years are all 64-bit ARM; debug builds also get x86_64 for the CI emulator.

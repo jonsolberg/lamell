@@ -124,7 +124,7 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
   <div class="top" style="margin:-12px -16px 0;">
     <div class="row"><h1>Svampar</h1><span class="muted small" id="sp-total"></span></div>
     <div class="search"><input id="q" type="search" placeholder="Sök svenskt eller latinskt namn" autocomplete="off"></div>
-    <div class="filters"><select id="f-edib" aria-label="Visa"></select><select id="f-group" aria-label="Grupp"></select></div>
+    <div class="filters"><select id="f-edib" aria-label="Visa"></select><select id="f-group" aria-label="Familj"></select></div>
   </div>
   <div class="count" id="sp-count"></div>
   <div class="list" id="sp-list"></div>
@@ -194,7 +194,7 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 4px}
 
   <div class="card small">
         <p style="margin:0 0 8px">Version <span id="ver"></span>. Lamell är gratis, utan reklam och fungerar helt offline – inget du fotar eller sparar lämnar telefonen.</p>
-    <p style="margin:0 0 8px"><b>Arterna:</b> 250 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar.</p>
+    <p style="margin:0 0 8px"><b>Arterna:</b> 250 svenska svampar. Varje art länkar till Svampguiden och till Artfakta (SLU Artdatabanken) för fler foton, kartor och längre beskrivningar. Rödlistekategorierna följer Rödlistan 2025 från SLU Artdatabanken, och arterna är grupperade efter familj.</p>
     <p style="margin:0 0 8px"><b>Foton:</b> Fotona kommer från Wikimedia Commons och har öppna licenser (CC0, CC BY eller CC BY-SA). Fotograf och licens står under varje bild.</p>
     <p style="margin:0 0 8px"><b>Bildigenkänning:</b> <span id="model-info">Danish Fungi 2020-modellen (Picek m.fl., WACV 2022), EfficientNet-B3 tränad på 1 604 arter från Danmark. Licens CC BY-NC 4.0 – modellen får inte användas kommersiellt.</span></p>
     <p style="margin:0 0 8px"><b>Licens:</b> Källkoden är fri programvara under GNU General Public License v3. <a href="https://github.com/jonsolberg/lamell">Källkod på GitHub</a></p>
@@ -323,15 +323,16 @@ function inSeason(sp, m){ const [a,b] = sp.m; return a <= b ? (m >= a && m <= b)
 function renderFilters(){
   const ed = [["all","Alla arter"],["now","I säsong nu"],["M","Matsvampar"],["G","Giftiga"],["D","Dödligt giftiga"],["O","Oätliga"],["red","Rödlistade"]];
   $("f-edib").innerHTML = ed.map(([k,v])=>`<option value="${k}" ${state.edib===k?"selected":""}>${v}</option>`).join("");
-  const groups = [...new Set(SPECIES.map(s=>s.g))].sort((a,b)=>a.localeCompare(b,"sv"));
-  $("f-group").innerHTML = `<option value="all">Alla grupper</option>` +
-    groups.map(g=>`<option value="${esc(g)}" ${state.group===g?"selected":""}>${esc(g[0].toUpperCase()+g.slice(1))}</option>`).join("");
+  const fams = new Map(); SPECIES.forEach(s=>fams.set(s.f, s.g));
+  const groups = [...fams].sort((a,b)=>a[1].localeCompare(b[1],"sv"));
+  $("f-group").innerHTML = `<option value="all">Alla familjer</option>` +
+    groups.map(([f,g])=>`<option value="${esc(f)}" ${state.group===f?"selected":""}>${esc(g)} (${esc(f)})</option>`).join("");
 }
 function renderSpecies(){
   const q = fold(state.q.trim()), m = new Date().getMonth()+1;
   const out = SPECIES.filter(s => {
     if (q && !fold(s.sv).includes(q) && !fold(s.la).includes(q)) return false;
-    if (state.group !== "all" && s.g !== state.group) return false;
+    if (state.group !== "all" && s.f !== state.group) return false;
     if (state.edib === "now") return inSeason(s, m);
     if (state.edib === "red") return RED_LISTED.has(s.r);
     if (state.edib !== "all") return s.e === state.edib;
@@ -373,7 +374,7 @@ window.onBack = function(){
 function openSpecies(id){
   const s = BY_ID.get(id); if (!s) return;
   const m = new Date().getMonth()+1;
-  $("sd-group").textContent = s.g[0].toUpperCase()+s.g.slice(1);
+  $("sd-group").textContent = `${s.g} · ${s.f}`;
   const months = MONTHS.map((x,i)=>`<span class="${inSeason(s,i+1)?"on":""} ${i+1===m?"now":""}" title="${MONTH_NAMES[i]}">${x}</span>`).join("");
   const looks = s.l.map(i=>BY_ID.get(i)).filter(Boolean);
   const myFinds = finds.filter(f=>f.sp===s.id);
@@ -386,7 +387,7 @@ function openSpecies(id){
     ${PHOTOS[s.id] ? `<div class="hero"><img src="photos/${s.id}.webp" alt="${esc(s.sv)}"><div class="credit">${credit(s.id)}</div></div>` : ""}
     <h1>${esc(s.sv)}</h1>
     <div class="l muted" style="font-style:italic;margin-bottom:8px">${esc(s.la)}</div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${badge(s.e)} ${stars(s.s)} <span class="badge" style="background:var(--card2);color:var(--muted)">Rödlista: ${RED[s.r]||s.r}</span></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${badge(s.e)} ${stars(s.s)} <span class="badge" style="background:var(--card2);color:var(--muted)">Rödlistan 2025: ${RED[s.r]||s.r}</span></div>
     ${warn}
     ${RECOG && !RECOG.has(s.id) ? `<div class="warnbox info"><b>Okänd för bildigenkänningen</b>Bildmodellen är tränad på danska fynd och känner inte till den här arten, så den föreslås aldrig när du fotar. Bestäm den med beskrivningen och förväxlingsarterna.</div>` : ""}
     <div class="card"><h3>Kännetecken</h3><div>${esc(s.k)}</div></div>
