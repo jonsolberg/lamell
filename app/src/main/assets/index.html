@@ -374,7 +374,7 @@ window.onBack = function(){
 function openSpecies(id){
   const s = BY_ID.get(id); if (!s) return;
   const m = new Date().getMonth()+1;
-  $("sd-group").textContent = `${s.g} · ${s.f}`;
+  $("sd-group").textContent = s.g;
   const months = MONTHS.map((x,i)=>`<span class="${inSeason(s,i+1)?"on":""} ${i+1===m?"now":""}" title="${MONTH_NAMES[i]}">${x}</span>`).join("");
   const looks = s.l.map(i=>BY_ID.get(i)).filter(Boolean);
   const myFinds = finds.filter(f=>f.sp===s.id);
@@ -387,7 +387,7 @@ function openSpecies(id){
     ${PHOTOS[s.id] ? `<div class="hero"><img src="photos/${s.id}.webp" alt="${esc(s.sv)}"><div class="credit">${credit(s.id)}</div></div>` : ""}
     <h1>${esc(s.sv)}</h1>
     <div class="l muted" style="font-style:italic;margin-bottom:8px">${esc(s.la)}</div>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${badge(s.e)} ${stars(s.s)} <span class="badge" style="background:var(--card2);color:var(--muted)">Rödlistan 2025: ${RED[s.r]||s.r}</span></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${badge(s.e)} ${stars(s.s)} <span class="badge" style="background:var(--card2);color:var(--muted)">Rödlistan 2025: ${RED[s.r]||s.r}</span> <span class="badge" style="background:var(--card2);color:var(--muted)">Familj: ${s.f}</span></div>
     ${warn}
     ${RECOG && !RECOG.has(s.id) ? `<div class="warnbox info"><b>Okänd för bildigenkänningen</b>Bildmodellen är tränad på danska fynd och känner inte till den här arten, så den föreslås aldrig när du fotar. Bestäm den med beskrivningen och förväxlingsarterna.</div>` : ""}
     <div class="card"><h3>Kännetecken</h3><div>${esc(s.k)}</div></div>
