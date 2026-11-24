@@ -1,0 +1,25 @@
+{
+ "size": 384,
+ "mode": "squash",
+ "mean": [
+  0.5,
+  0.5,
+  0.5
+ ],
+ "std": [
+  0.5,
+  0.5,
+  0.5
+ ],
+ "crop_pct": 1.0,
+ "check": {
+  "photos": 36,
+  "top1": 25,
+  "top5": 31
+ },
+ "model": "BVRA/tf_efficientnet_b3.in1k_ft_df20_384",
+ "classes": 1604,
+ "input": "image",
+ "license": "CC BY-NC 4.0",
+ "dataset": "Danish Fungi 2020 (Picek et al., WACV 2022)"
+}
