@@ -47,7 +47,7 @@ Release builds are signed with the key in the repository secrets `SIGNING_KEYSTO
 - Image recognition: Danish Fungi 2020 by Lukáš Picek, Milan Šulc, Jiří Matas et al. (*Danish Fungi 2020 – Not Just Another Image Recognition Dataset*, WACV 2022). The model weights are licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) and may not be used commercially. They are not covered by the GPL licence below.
 - Photos: [Wikimedia Commons](https://commons.wikimedia.org/) photographers, under CC0, public domain, CC BY or CC BY-SA. The photographer and licence are shown under every photo in the app and listed in `app/src/main/assets/data/photos.json`; `scripts/fetch_photos.py` picks them (the species' image on Wikidata, otherwise its Commons category).
 - Taxon ids and red-list categories: [Artfakta](https://artfakta.se/), SLU Artdatabanken.
-- [ONNX Runtime](https://github.com/microsoft/onnxruntime) (MIT) and [AndroidX](https://developer.android.com/jetpack/androidx) (Apache 2.0).
+- [ONNX Runtime](https://onnxruntime.ai/) (MIT) and [AndroidX](https://developer.android.com/jetpack/androidx) (Apache 2.0).
 
 ## Support
 
